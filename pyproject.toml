@@ -9,6 +9,7 @@ readme = "README.md"
 python = "^3.10"
 firebase-admin = "6.1.0"
 pandas = "1.5.3"
+openai = "0.27.2" # https://pypi.org/project/openai/
 
 [tool.poetry.group.dev.dependencies]
 ipykernel = "^6.21.2"
