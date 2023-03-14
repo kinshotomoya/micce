@@ -12,6 +12,7 @@ pandas = "1.5.3"
 openai = "0.27.2" # https://pypi.org/project/openai/
 tiktoken = "0.3.1" # https://pypi.org/project/tiktoken/0.3.0/
 pyspark = "^3.3.2"
+python-dotenv = "^1.0.0" # https://pypi.org/project/python-dotenv/
 
 [tool.poetry.group.dev.dependencies]
 ipykernel = "^6.21.2"
