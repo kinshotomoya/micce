@@ -6,13 +6,17 @@ authors = ["kinsho"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "3.11.2"
 firebase-admin = "6.1.0"
 pandas = "1.5.3"
 openai = "0.27.2" # https://pypi.org/project/openai/
 tiktoken = "0.3.1" # https://pypi.org/project/tiktoken/0.3.0/
 pyspark = "^3.3.2"
 python-dotenv = "^1.0.0" # https://pypi.org/project/python-dotenv/
+matplotlib = "^3.7.1"
+plotly = "^5.13.1"
+scipy = "1.10.1"
+scikit-learn = "^1.2.2"
 
 [tool.poetry.group.dev.dependencies]
 ipykernel = "^6.21.2"

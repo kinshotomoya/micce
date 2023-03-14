@@ -5,10 +5,12 @@ import os
 import tiktoken
 import json
 import re
+from typing import List,Dict
 
 
 INDEX_FILE = "index.pickle"
 ROW_DATA = "./micce/data/data.json"
+EMBEDDING_MODEL = "text-embedding-ada-002"
 
 load_dotenv()
 openai.api_key: str = os.environ.get("OPENAI_API_KEY")
@@ -19,18 +21,7 @@ enc = tiktoken.get_encoding("cl100k_base")
 
 embetting_res_dummy = json.load(open("./micce/data/embetting_res_dummy.json"))
 
-class Index:
-    def __init__(self, name = INDEX_FILE) -> None:
-        self.name = name
-        try:
-            self.data = pickle.load(open(self.name, "rb"))
-        except:
-            self.data = {}
-
-    def print(self) -> None:
-        print(self.content)
-
-def embetting(body: str):
+def embedding(body: str):
     EMBED_MAX_SIZE = 8191
     body = body.replace("\n", " ")
     encoded_body = enc.encode(body)
@@ -40,34 +31,45 @@ def embetting(body: str):
     if len(encoded_body) > EMBED_MAX_SIZE:
         encoded_body = encoded_body[:EMBED_MAX_SIZE]
 
-    res = embetting_res_dummy 
     # NOTE: 無駄にapi叩かないようにdummyデータを利用
-    # res = openai.Embedding.create(
-    #     input=[encoded_body],
-    #     model="text-embedding-ada-002"
-    # )
-    print(res["data"][0]["embedding"])
+    res = openai.Embedding.create(
+        input=[encoded_body],
+        model=EMBEDDING_MODEL
+    )
+    return res["data"][0]["embedding"]
 
 def create_index():
+    index = Index()
     with open(ROW_DATA) as f:
-        data = json.load(f)
-    buf = []
+        data: Dict = json.load(f)
+    buf: List = []
     for page in data["pages"]:
-        title = page["title"]
+        title: str = page["title"]
         for line in data["pages"][0]["lines"]:
             line = line.strip()
             line = re.sub(r"https?://[^\s]+", "URL", line)
             line = re.sub(r"[\s]+", " ", line)
             buf.append(line)
-        body = " ".join(buf).strip()
-    embetting(body)
-    # print(body)
-        
+        body: str = " ".join(buf).strip()
+        index.get_or_create(body, title)
+    
+class Index:
+    def __init__(self, name = INDEX_FILE) -> None:
+        self.name = name
+        try:
+            self.data = pickle.load(open(self.name, "rb"))
+        except:
+            self.data = {}
 
-    # index: Index = Index("初めまして！！！")
-    # # pickleの説明：https://qiita.com/hatt0519/items/f1f4c059c28cb1575a93
-    # with open(INDEX_FILE, "wb") as f:
-    #     pickle.dump(index, f)
+    def get_or_create(self, body: str, title: str):
+        embetting_body: List = embedding(body)
+        if body not in self.data:
+            self.data[(title, body)] = embetting_body
+            with open(INDEX_FILE, "wb") as f:
+                pickle.dump(self.data, f)
+        else:
+            print("already exist")
+                
 
 
 if __name__ == "__main__":
