@@ -10,6 +10,8 @@ python = "^3.11"
 firebase-admin = "6.1.0"
 pandas = "1.5.3"
 openai = "0.27.2" # https://pypi.org/project/openai/
+tiktoken = "0.3.1" # https://pypi.org/project/tiktoken/0.3.0/
+pyspark = "^3.3.2"
 
 [tool.poetry.group.dev.dependencies]
 ipykernel = "^6.21.2"
