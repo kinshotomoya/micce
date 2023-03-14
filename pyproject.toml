@@ -6,7 +6,7 @@ authors = ["kinsho"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.11"
 firebase-admin = "6.1.0"
 pandas = "1.5.3"
 openai = "0.27.2" # https://pypi.org/project/openai/
